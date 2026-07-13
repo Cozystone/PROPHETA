@@ -53,3 +53,20 @@ Incremental offline-essentials RSS measured (naive, some double-load):
 2. **Lean offline realizer** — swap the 1.2 GB holographic_lm for the small realizer in the
    offline profile → −~1 GB.
 Net: cartridge(sharded ~0.1) + Kiwi(0.5) + small realizer(0.16) ≈ **~0.8 GB resident → fits 4GB.**
+
+## PROVEN on the real cartridge (2026-07-14) — sharded rebuild saves 1.3 GB RAM
+Rebuilt the live 28M-triple cartridge (`kg_triples`) → `kg_triples_sharded` with rebuild_sharded.py
+(round-trip 9/9 identical, ~162s). Measured RAM to open + query:
+
+| cartridge | open + 10 queries RSS | answers |
+|---|---:|---|
+| ram (shipped) | **+1,484 MB** | yes |
+| **sharded (rebuilt)** | **+147 MB** | yes |
+
+**RAM win = ~1,337 MB (~1.3 GB) on the real cartridge — measured, not extrapolated.** Disk size
+nearly identical (~1.1 GB). The sharded pack is built and sitting at
+`data/graph_scale/kg_triples_sharded`, verified, ready to swap into the live engine
+(next: battery-coverage check from it, then point the answer path at it + P0 verify).
+
+**4GB laptop status: PROVEN reachable.** cartridge 1.5GB→0.15GB (done) + lean realizer
+(holographic 1.2GB→small ~0.16GB, next) ⇒ resident ~0.8GB core, world-graph on SSD.
