@@ -1,0 +1,11 @@
+# heavy data — packs/weights are downloaded or HQ-built, never committed
+*.col
+*.npz
+*.bin
+*.hash
+data/
+packs/
+weights/
+__pycache__/
+*.pyc
+.env
