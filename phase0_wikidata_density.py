@@ -59,7 +59,9 @@ def main() -> int:
         try: f.unlink()
         except Exception: pass
     store_dir.mkdir(exist_ok=True)
-    store = TripleStore(store_dir, write_src=False)   # world-graph pack: no per-triple provenance
+    # world-graph pack: no per-triple provenance (write_src=False) AND a sharded (on-disk) term
+    # dict so a 36GB pack's ~113M-term vocabulary never loads into RAM — the 4GB-laptop method.
+    store = TripleStore(store_dir, dict_backend="sharded", write_src=False)
 
     got_ent = trip = 0
     t0 = time.time()
