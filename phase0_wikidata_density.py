@@ -59,7 +59,7 @@ def main() -> int:
         try: f.unlink()
         except Exception: pass
     store_dir.mkdir(exist_ok=True)
-    store = TripleStore(store_dir)
+    store = TripleStore(store_dir, write_src=False)   # world-graph pack: no per-triple provenance
 
     got_ent = trip = 0
     t0 = time.time()
@@ -98,6 +98,17 @@ def main() -> int:
     print(f"    at target   14   B/triple  =>  {WD*14/1e9:.1f} GB   (binary-hashed ~{WD*14/1e9/3:.1f} GB)")
     gate = WD * bpt / 1e9 <= 20 or WD * 14 / 1e9 <= 20
     print(f"  GATE (full <= 20GB int): {'PASS' if gate else 'needs compression (Phase 1)'}")
+
+    # ANSWERABILITY: prove the pack ANSWERS, not just fits — query a few ingested entities.
+    print("\n=== answerability (facts_about, fully local) ===")
+    shown = 0
+    for qn in range(1, 900):
+        rows = store.facts_about(f"Q{qn}")
+        if rows and len(rows) >= 3:
+            print(f"  Q{qn}: {len(rows)} facts, e.g. {rows[0]}  |  {rows[1]}")
+            shown += 1
+        if shown >= 4:
+            break
     return 0
 
 
