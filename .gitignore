@@ -9,3 +9,5 @@ weights/
 __pycache__/
 *.pyc
 .env
+
+_phase0_store/
