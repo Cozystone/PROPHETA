@@ -70,3 +70,14 @@ nearly identical (~1.1 GB). The sharded pack is built and sitting at
 
 **4GB laptop status: PROVEN reachable.** cartridge 1.5GB→0.15GB (done) + lean realizer
 (holographic 1.2GB→small ~0.16GB, next) ⇒ resident ~0.8GB core, world-graph on SSD.
+
+## SHIPPED to production (2026-07-14) — cartridge swapped, engine RSS 2500→1184 MB
+Ran swap_cartridge.py: stopped all kg_triples holders (watchdog + every app.main uvicorn incl.
+orphans + learner + sprint), renamed kg_triples→kg_triples_ram_backup and kg_triples_sharded→
+kg_triples, restarted via watchdog. Result:
+- live cartridge backend now **sharded**; **engine RSS 2,500 → 1,184 MB (−1.3 GB, live)**
+- **P0 sentinel GREEN 8/8**; cartridge answers correctly (중력/블랙홀 real definitions)
+- ram original preserved at kg_triples_ram_backup (revertible)
+
+The −1.3 GB 4GB-fit win is now REAL in the running engine, not a plan. Next for full 4GB core:
+lean realizer profile (holographic 1.2GB → small ~0.16GB) → engine ~0.4GB core + world-graph on SSD.
