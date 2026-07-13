@@ -53,3 +53,24 @@ earlier "14 B/triple is free via amortization" was too optimistic — retracted.
   variable-length (delta+varint on sorted s) can approach the ~6.5 GB hashed target.
 - Thesis intact regardless: even at the plateau 30 GB, that is ~120× smaller than GPT‑4's
   3,600 GB. "World fits on a laptop" holds; the exact GB is 6.5–30 depending on hashing.
+
+## Phase 1 — RANDOM-sample de-risk (2026-07-14): honest size is ~36GB, not 7-20GB
+The 21.6/30GB came from low-Q HUB entities. A RANDOM sample across the Q-space (the true
+Wikidata average) says:
+
+| sample | triples/entity | B/triple | full-Wikidata extrapolation |
+|---|---:|---:|---:|
+| low-Q hubs (Q1…Q3600) | 280 | 21.6 | ~30 GB |
+| **random (true average)** | **16.9** | **25.8** | **~36 GB** |
+
+Random sparse entities amortize terms WORSE (each entity's few triples introduce fresh
+terms). Unique objects split ~48% Q-ids / ~52% literals.
+
+**Honest verdict: the raw world-graph is ~36 GB int, NOT the 7-20 GB I first claimed (that was
+optimistic on two counts — amortization AND low-Q sampling).** Reducible with literal hashing
+(~52% of objects) toward ~25-28 GB, and further with ID delta-coding — but ~6.5 GB is not
+free, it needs aggressive multi-column hashing.
+
+**What survives (the real thesis, intact):** ~36 GB « GPT-4's ~3,600 GB (still ~100× smaller),
+fits on any laptop, answers locally with 0 fabrication. "The world fits on a laptop" holds; the
+honest number is ~36 GB raw / ~25 GB with literal hashing, not 6.5 GB.
