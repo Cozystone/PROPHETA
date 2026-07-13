@@ -1,0 +1,6 @@
+{
+  "count": 533027,
+  "terms": 386541,
+  "format": "int32_columnar_spo",
+  "dict_backend": "ram"
+}

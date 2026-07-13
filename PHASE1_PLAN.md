@@ -28,3 +28,28 @@ At full scale: `s/p/o` (11.7) + amortized dict (~1.6) + no `src.col` = **~13.3 B
       just *fit*, it *answers*.
 - [ ] Remaining to ~14: dict amortization at scale (needs a 100k+ entity ingest) + binary
       hashing of the retrieval index (→ ~6.5 GB full-Wikidata).
+
+## Phase 1 — amortization DE-RISK (2026-07-14): the optimistic claim was WRONG, corrected
+Measured terms/triple across scale (real Wikidata, checkpoints 532→3,536 entities):
+
+| entities | B/triple | terms/triple |
+|---:|---:|---:|
+| 532 | 22.0 | 10.2 |
+| 1,026 | 21.6 | 9.8 |
+| 2,015 | 21.6 | 9.8 |
+| 3,536 | 21.7 | **9.8 (plateau)** |
+
+**Honest correction:** terms/triple does NOT amortize toward ~1.6 — it PLATEAUS at ~9.8.
+Wikidata values carry many UNIQUE literals (dates, quantities, coordinates, strings) that don't
+share. So B/triple plateaus at **~21.6**, and full Wikidata ≈ **30 GB int**, NOT 19.6 GB. The
+earlier "14 B/triple is free via amortization" was too optimistic — retracted.
+
+**Revised path to the ~6.5 GB target (binary hashing is now REQUIRED, not optional):**
+- The 21.6 = s/p/o (11.7, int32 floor) + terms.txt (~9.8, dominated by literal values).
+- **Hash the value/literal space**: replace verbatim literal storage with fixed-width binary
+  hashes (dates→packed int, quantities→float32, strings→64-bit semantic hash + a side lexicon
+  only for the ones we must render). Target: terms.txt ~9.8 → ~2–3 B/triple.
+- Then full Wikidata ≈ (11.7 + ~2.5) × 1.4B ≈ **~20 GB**, and dropping the id columns to
+  variable-length (delta+varint on sorted s) can approach the ~6.5 GB hashed target.
+- Thesis intact regardless: even at the plateau 30 GB, that is ~120× smaller than GPT‑4's
+  3,600 GB. "World fits on a laptop" holds; the exact GB is 6.5–30 depending on hashing.
